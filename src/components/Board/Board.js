@@ -8,7 +8,6 @@ class Board extends React.Component {
     setSingleBoard: PropTypes.func,
   }
 
-  // Event to view single board
   setSelectedBoardId = (e) => {
     e.preventDefault();
     const { setSingleBoard, board } = this.props;

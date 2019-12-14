@@ -34,6 +34,9 @@ class App extends React.Component {
     <div className="App">
       <MyNavbar authed={authed} />
       <button className="btn btn-danger">Bootstrap Button</button>
+      {
+        (authed) ? (<div>You logged in</div>) : (<Auth />)
+      }
     </div>
     );
   }

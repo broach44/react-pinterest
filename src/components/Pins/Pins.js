@@ -11,8 +11,11 @@ class Pins extends React.Component {
     const { pin } = this.props;
 
     return (
-      <div>
-        <p>{pin.title}</p>
+      <div class="card">
+        <img class="card-img-top" src={pin.imageUrl} alt="cat" />
+        <div class="card-body">
+          <h5 class="card-title">{pin.title}</h5>
+        </div>
       </div>
     );
   }

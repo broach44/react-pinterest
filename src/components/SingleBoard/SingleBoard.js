@@ -15,18 +15,30 @@ class SingleBoard extends React.Component {
     pins: [],
   }
 
+  getPinData = (selectedBoardId) => {
+    pinsData.getPinsByBoardId(selectedBoardId)
+      .then((pins) => {
+        this.setState({ pins });
+      })
+      .catch((error) => console.error(error));
+  }
+
   componentDidMount() {
     const { selectedBoardId } = this.props;
     boardsData.getSingleBoard(selectedBoardId)
       .then((request) => {
         this.setState({ board: request.data });
-        pinsData.getPinsByBoardId(selectedBoardId)
-          .then((pins) => {
-            this.setState({ pins });
-          })
-          .catch((error) => console.error(error));
+        this.getPinData(selectedBoardId);
       })
       .catch((errorFromGetSingleBoard) => console.error(errorFromGetSingleBoard));
+  }
+
+  deleteSinglePin = (pinId) => {
+    pinsData.deletePin(pinId)
+      .then(() => {
+        this.getPinData(this.props.selectedBoardId);
+      })
+      .catch((error) => console.error(error));
   }
 
   removeSelectedBoardId = (e) => {
@@ -44,7 +56,7 @@ class SingleBoard extends React.Component {
           <h2>{board.name}</h2>
           <p>{board.description}</p>
           <div className="d-flex flex-wrap">
-            { pins.map((pin) => <Pins pin={pin}/>)}
+            { pins.map((pin) => <Pins key={pin.id} pin={pin} deleteSinglePin={this.deleteSinglePin}/>)}
           </div>
         </div>
       </div>

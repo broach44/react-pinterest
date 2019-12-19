@@ -13,6 +13,9 @@ class BoardsContainer extends React.Component {
 
   state = {
     boards: [],
+    editMode: false,
+    boardToEdit: {},
+    showBoardForm: false,
   }
 
   componentDidMount() {
@@ -31,17 +34,46 @@ class BoardsContainer extends React.Component {
     boardsData.saveBoard(newBoard)
       .then(() => {
         this.getBoardData();
+        this.setState({ showBoardForm: false });
       })
       .catch((errorFromSaveBoard) => console.error(errorFromSaveBoard));
     this.setState({ boardName: '', description: '' });
+  }
+
+  updateBoard = (boardId, updatedBoard) => {
+    boardsData.updateBoard(boardId, updatedBoard)
+      .then(() => {
+        this.setState({ editMode: false, showBoardForm: false });
+        this.getBoardData();
+      })
+      .catch((errFromUpdateBoard) => console.error(errFromUpdateBoard));
+  };
+
+  setEditMode = (editMode) => {
+    this.setState({ editMode, showBoardForm: true });
+  };
+
+  setBoardToEdit = (board) => {
+    this.setState({ boardToEdit: board });
+  }
+
+  setshowBoardForm = () => {
+    this.setState({ showBoardForm: true });
   }
 
   render() {
     const { setSingleBoard } = this.props;
     return (
     <div>
-      <BoardForm addBoard={this.addBoard} />
-      {this.state.boards.map((board) => <Board key={board.id} board={board} setSingleBoard={setSingleBoard} />)}
+      <button className="btn btn-secondary mt-2" onClick={this.setshowBoardForm}>Add New Board</button>
+      { this.state.showBoardForm
+      && <BoardForm
+        addBoard={this.addBoard}
+        editMode={this.state.editMode}
+        boardToEdit={this.state.boardToEdit}
+        updateBoard={this.updateBoard}
+      /> }
+      {this.state.boards.map((board) => <Board key={board.id} board={board} setSingleBoard={setSingleBoard} setEditMode={this.setEditMode} setBoardToEdit={this.setBoardToEdit} />)}
     </div>);
   }
 }

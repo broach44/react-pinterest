@@ -2,16 +2,33 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import authData from '../../helpers/data/authData';
+import boardShape from '../../helpers/propz/boardShape';
 
 class BoardForm extends React.Component {
   static propTypes = {
     addBoard: PropTypes.func,
+    boardToEdit: boardShape.boardShape,
+    editMode: PropTypes.bool,
+    updateBoard: PropTypes.func,
   }
 
   state = {
     boardName: '',
     description: '',
   }
+
+  componentDidMount() {
+    const { boardToEdit, editMode } = this.props;
+    if (editMode) {
+      this.setState({ boardName: boardToEdit.name, description: boardToEdit.description });
+    }
+  }
+  // **The lifecycle method below could be used in place of the showform function we created
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.boardToEdit.id !== this.props.boardToEdit.id && this.props.editMode) {
+  //     this.setState({ boardName: this.props.boardToEdit.name, description: this.props.boardToEdit.description});
+  //   }
+  // }
 
   saveBoardEvent = (e) => {
     const { addBoard } = this.props;
@@ -25,6 +42,17 @@ class BoardForm extends React.Component {
     addBoard(newBoard);
   }
 
+  updateBoardEvent = (e) => {
+    e.preventDefault();
+    const { updateBoard, boardToEdit } = this.props;
+    const updatedBoard = {
+      name: this.state.boardName,
+      description: this.state.description,
+      uid: boardToEdit.uid,
+    };
+    updateBoard(boardToEdit.id, updatedBoard);
+  }
+
   nameChange = (e) => {
     e.preventDefault();
     this.setState({ boardName: e.target.value });
@@ -36,6 +64,7 @@ class BoardForm extends React.Component {
   }
 
   render() {
+    const { editMode } = this.props;
     return (
       <form className='col-6 offset-3 BoardForm'>
         <div className="form-group">
@@ -60,7 +89,10 @@ class BoardForm extends React.Component {
             onChange={this.descriptionChange}
           />
         </div>
-        <button className="btn btn-secondary" onClick={this.saveBoardEvent}>Save Board</button>
+        {
+          (editMode) ? (<button className="btn btn-info" onClick={this.updateBoardEvent}>Update Board</button>
+          ) : (<button className="btn btn-info" onClick={this.saveBoardEvent}>Save Board</button>)
+        }
       </form>
     );
   }

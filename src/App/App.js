@@ -5,7 +5,6 @@ import firebaseConnection from '../helpers/data/connection';
 import Auth from '../components/Auth/Auth';
 import MyNavbar from '../components/MyNavbar/MyNavbar';
 import BoardsContainer from '../components/BoardsContainer/BoardsContainer';
-// import setSingleBoard from '../components/SingleBoard/SingleBoard';
 
 import './App.scss';
 import SingleBoard from '../components/SingleBoard/SingleBoard';

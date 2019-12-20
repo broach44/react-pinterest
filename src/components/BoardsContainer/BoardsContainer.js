@@ -73,7 +73,9 @@ class BoardsContainer extends React.Component {
         boardToEdit={this.state.boardToEdit}
         updateBoard={this.updateBoard}
       /> }
+      <div className="row">
       {this.state.boards.map((board) => <Board key={board.id} board={board} setSingleBoard={setSingleBoard} setEditMode={this.setEditMode} setBoardToEdit={this.setBoardToEdit} />)}
+    </div>
     </div>);
   }
 }
